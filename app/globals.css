@@ -1,0 +1,287 @@
+:root {
+  --bg: #0b1020;
+  --panel: #121a2f;
+  --panel-2: #17213a;
+  --border: #243250;
+  --text: #ecf1ff;
+  --muted: #9fb0d1;
+  --accent: #7aa2ff;
+  --success: #39c98a;
+  --warning: #ffbe5c;
+  --danger: #ff6b81;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 320px;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--panel);
+  padding: 24px 18px;
+}
+
+.main {
+  padding: 24px;
+}
+
+.context-panel {
+  border-left: 1px solid var(--border);
+  background: var(--panel);
+  padding: 24px 18px;
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--muted);
+}
+
+.nav-item.active,
+.nav-item:hover {
+  background: var(--panel-2);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  margin: 0 0 8px;
+  font-size: 30px;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: var(--muted);
+  max-width: 780px;
+  line-height: 1.5;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.card h3,
+.card h4 {
+  margin-top: 0;
+}
+
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.span-5 { grid-column: span 5; }
+.span-6 { grid-column: span 6; }
+.span-7 { grid-column: span 7; }
+.span-8 { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+
+.kpi {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.badge.success { color: var(--success); }
+.badge.warning { color: var(--warning); }
+.badge.danger { color: var(--danger); }
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-row:last-child {
+  border-bottom: 0;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.button {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.button.primary {
+  background: var(--accent);
+  color: #081020;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.stage-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stage-card {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.stage-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.small {
+  font-size: 13px;
+}
+
+@media (max-width: 1200px) {
+  .app-shell {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .context-panel {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .form-grid,
+  .stage-board,
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .span-3,
+  .span-4,
+  .span-5,
+  .span-6,
+  .span-7,
+  .span-8,
+  .span-12 {
+    grid-column: span 1;
+  }
+}
