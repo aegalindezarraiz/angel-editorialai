@@ -1,0 +1,104 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { AnalyticsScreen } from '@/components/screens/analytics-screen';
+import { useAppState } from '@/context/app-state';
+import { fetchAnalyticsFromOrchestrator } from '@/lib/orchestrator-client';
+import { fetchAnalyticsData } from '@/lib/api';
+
+type AnalyticsPayload = {
+  overview: {
+    impressions: string;
+    engagementRate: string;
+    saves: string;
+    leads: string;
+  };
+  topHooks: string[];
+  topFormats: Array<{ format: string; performance: string }>;
+  recommendations: string[];
+};
+
+export default function AnalyticsPage() {
+  const { activeMissionId } = useAppState();
+  const [data, setData] = useState<AnalyticsPayload | null>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadAnalytics() {
+      setStatus('loading');
+
+      try {
+        if (activeMissionId) {
+          const orchestratorData = await fetchAnalyticsFromOrchestrator(activeMissionId);
+          const analytics = orchestratorData.analytics;
+          if (isMounted && analytics) {
+            setData(analytics);
+            setStatus('ready');
+            return;
+          }
+        }
+
+        const fallbackData = await fetchAnalyticsData();
+        if (isMounted) {
+          setData(fallbackData);
+          setStatus('ready');
+        }
+      } catch {
+        if (isMounted) {
+          setStatus('error');
+        }
+      }
+    }
+
+    loadAnalytics();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeMissionId]);
+
+  if (!data) {
+    return (
+      <div className="card">
+        <div className="list-row">
+          <div>
+            <div>Analytics Mission Context</div>
+            <div className="muted small">{activeMissionId ?? 'mission-local-001'}</div>
+          </div>
+          <div>
+            <span className={status === 'ready' ? 'badge success' : status === 'loading' ? 'badge warning' : status === 'error' ? 'badge danger' : 'badge'}>
+              {status}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div className="list-row">
+          <div>
+            <div>Analytics Mission Context</div>
+            <div className="muted small">{activeMissionId ?? 'mission-local-001'}</div>
+          </div>
+          <div>
+            <span className={status === 'ready' ? 'badge success' : status === 'loading' ? 'badge warning' : status === 'error' ? 'badge danger' : 'badge'}>
+              {status}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <AnalyticsScreen
+        overview={data.overview}
+        topHooks={data.topHooks}
+        topFormats={data.topFormats}
+        recommendations={data.recommendations}
+      />
+    </div>
+  );
+}
