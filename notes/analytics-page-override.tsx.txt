@@ -1,0 +1,15 @@
+import { AnalyticsScreen } from '@/components/screens/analytics-screen';
+import { fetchAnalyticsData } from '@/lib/api';
+
+export default async function AnalyticsPage() {
+  const data = await fetchAnalyticsData();
+
+  return (
+    <AnalyticsScreen
+      overview={data.overview}
+      topHooks={data.topHooks}
+      topFormats={data.topFormats}
+      recommendations={data.recommendations}
+    />
+  );
+}
