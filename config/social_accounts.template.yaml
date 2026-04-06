@@ -1,0 +1,20 @@
+accounts:
+  linkedin:
+    enabled: true
+    account_name: ""
+    actor_id: ""
+    organization_id: ""
+  instagram:
+    enabled: true
+    account_name: ""
+    instagram_business_account_id: ""
+    facebook_page_id: ""
+  tiktok:
+    enabled: true
+    account_name: ""
+    account_id: ""
+  blog_web:
+    enabled: true
+    site_name: ""
+    site_id: ""
+    cms_type: ""
