@@ -1,0 +1,47 @@
+routes:
+  trend_intelligence_agent:
+    - trend_data
+    - web_research
+  market_research_agent:
+    - web_research
+    - database
+  audience_insight_agent:
+    - web_research
+    - memory_store
+  editorial_strategy_agent:
+    - trend_data
+    - memory_store
+  blog_agent:
+    - filesystem
+    - memory_store
+  linkedin_agent:
+    - memory_store
+    - filesystem
+  instagram_agent:
+    - memory_store
+    - filesystem
+  tiktok_agent:
+    - trend_data
+    - memory_store
+  creative_qa_agent:
+    - filesystem
+    - memory_store
+  publishing_agent:
+    - social_operations
+    - filesystem
+    - database
+  performance_analyst_agent:
+    - analytics
+    - database
+    - memory_store
+  memory_agent:
+    - memory_store
+    - database
+  orchestrator_agent:
+    - web_research
+    - trend_data
+    - social_operations
+    - analytics
+    - memory_store
+    - filesystem
+    - database
