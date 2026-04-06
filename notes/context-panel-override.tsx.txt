@@ -1,0 +1,43 @@
+"use client";
+
+import { useAppState } from '@/context/app-state';
+
+export function ContextPanel() {
+  const { activeMissionId, autonomyMode } = useAppState();
+
+  return (
+    <aside className="context-panel">
+      <div className="stack">
+        <div className="card">
+          <h3>System State</h3>
+          <div className="stack small muted">
+            <span>Active Mission: {activeMissionId ?? 'mission-local-001'}</span>
+            <span>Autonomy Mode: {autonomyMode}</span>
+            <span>Orchestrator: connected or local fallback</span>
+            <span>Publishing Connections: 4 configured</span>
+            <span>Pending Approvals: 3</span>
+          </div>
+        </div>
+
+        <div className="card">
+          <h3>Connected Channels</h3>
+          <div className="stack small muted">
+            <span>LinkedIn</span>
+            <span>Instagram</span>
+            <span>TikTok</span>
+            <span>Blog / Web</span>
+          </div>
+        </div>
+
+        <div className="card">
+          <h3>Immediate Warnings</h3>
+          <div className="stack small muted">
+            <span>1 mission waiting for thesis approval.</span>
+            <span>2 assets require QA before scheduling.</span>
+            <span>Review active mission before publishing.</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
