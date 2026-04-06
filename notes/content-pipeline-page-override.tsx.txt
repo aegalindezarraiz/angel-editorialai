@@ -1,0 +1,8 @@
+import { PipelineScreen } from '@/components/screens/pipeline-screen';
+import { fetchPipelineData } from '@/lib/api';
+
+export default async function ContentPipelinePage() {
+  const stages = await fetchPipelineData();
+
+  return <PipelineScreen stages={stages} />;
+}
