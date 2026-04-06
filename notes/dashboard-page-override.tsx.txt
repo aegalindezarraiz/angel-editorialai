@@ -1,0 +1,14 @@
+import { DashboardScreen } from '@/components/screens/dashboard-screen';
+import { fetchDashboardData } from '@/lib/api';
+
+export default async function DashboardPage() {
+  const data = await fetchDashboardData();
+
+  return (
+    <DashboardScreen
+      activeMissions={data.activeMissions}
+      pipelineSnapshot={data.pipelineSnapshot}
+      trendSignals={data.trendSignals}
+    />
+  );
+}
