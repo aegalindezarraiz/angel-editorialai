@@ -1,0 +1,43 @@
+bindings:
+  linkedin:
+    integration_doc: integrations/linkedin.md
+    mcp_server: social_operations
+    agents:
+      - linkedin_agent
+      - publishing_agent
+      - performance_analyst_agent
+  instagram:
+    integration_doc: integrations/instagram.md
+    mcp_server: social_operations
+    agents:
+      - instagram_agent
+      - publishing_agent
+      - performance_analyst_agent
+  tiktok:
+    integration_doc: integrations/tiktok.md
+    mcp_server: social_operations
+    agents:
+      - tiktok_agent
+      - publishing_agent
+      - performance_analyst_agent
+  blog_web:
+    integration_doc: integrations/blog_web.md
+    mcp_server: web_research
+    agents:
+      - blog_agent
+      - market_research_agent
+      - publishing_agent
+  web_research:
+    integration_doc: integrations/web_research.md
+    mcp_server: web_research
+    agents:
+      - trend_intelligence_agent
+      - market_research_agent
+      - audience_insight_agent
+  analytics:
+    integration_doc: integrations/analytics.md
+    mcp_server: analytics
+    agents:
+      - performance_analyst_agent
+      - memory_agent
+      - orchestrator_agent
