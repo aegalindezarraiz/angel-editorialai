@@ -1,0 +1,16 @@
+import { PageHeader } from '@/components/page-header';
+import { MissionForm } from '@/components/mission-form';
+
+export default function NewMissionPage() {
+  return (
+    <div>
+      <PageHeader
+        title="New Mission"
+        subtitle="Define the strategic objective, audience, channels, and operating mode for a new multi-agent content mission."
+        actions={<button className="button primary">Analyze Mission</button>}
+      />
+
+      <MissionForm />
+    </div>
+  );
+}
