@@ -1,0 +1,92 @@
+"use client";
+
+import { PageHeader } from '@/components/page-header';
+import { MetricsOverview } from '@/components/metrics-overview';
+import { useAppState } from '@/context/app-state';
+
+type AnalyticsScreenProps = {
+  overview: {
+    impressions: string;
+    engagementRate: string;
+    saves: string;
+    leads: string;
+  };
+  topHooks: string[];
+  topFormats: Array<{ format: string; performance: string }>;
+  recommendations: string[];
+};
+
+export function AnalyticsScreen({ overview, topHooks, topFormats, recommendations }: AnalyticsScreenProps) {
+  const { activeMissionId, autonomyMode } = useAppState();
+
+  return (
+    <div>
+      <PageHeader
+        title="Analytics"
+        subtitle="Review channel performance, winning hooks, top formats, and next-cycle recommendations generated from the machine's feedback loop."
+        actions={
+          <>
+            <button className="button primary">Analyze Results</button>
+            <button className="button">Export Report</button>
+          </>
+        }
+      />
+
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div className="list-row">
+          <div>
+            <div>Mission Context</div>
+            <div className="muted small">{activeMissionId ?? 'mission-local-001'}</div>
+          </div>
+          <div>
+            <span className="badge">{autonomyMode}</span>
+          </div>
+        </div>
+      </div>
+
+      <MetricsOverview
+        impressions={overview.impressions}
+        engagementRate={overview.engagementRate}
+        saves={overview.saves}
+        leads={overview.leads}
+      />
+
+      <div className="card-grid" style={{ marginTop: 16 }}>
+        <div className="card span-6">
+          <h3>Top Hooks</h3>
+          <div className="stack">
+            {topHooks.map((hook) => (
+              <div className="list-row" key={hook}>
+                <div>{hook}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="card span-6">
+          <h3>Top Formats</h3>
+          <div className="stack">
+            {topFormats.map((item) => (
+              <div className="list-row" key={item.format}>
+                <div>{item.format}</div>
+                <div className="badge success">{item.performance}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="card span-12">
+          <h3>Optimization Recommendations</h3>
+          <div className="stage-board">
+            {recommendations.map((rec) => (
+              <div className="stage-card" key={rec}>
+                <div className="small muted">Next-cycle directive</div>
+                <p>{rec}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
