@@ -1,0 +1,101 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { DashboardScreen } from '@/components/screens/dashboard-screen';
+import { useAppState } from '@/context/app-state';
+import { fetchDashboardData } from '@/lib/api';
+import { fetchPipelineFromOrchestrator } from '@/lib/orchestrator-client';
+import { Mission, PipelineStage, TrendSignal } from '@/types';
+
+type DashboardPayload = {
+  activeMissions: Mission[];
+  pipelineSnapshot: PipelineStage[];
+  trendSignals: TrendSignal[];
+};
+
+export default function DashboardPage() {
+  const { activeMissionId } = useAppState();
+  const [data, setData] = useState<DashboardPayload | null>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadDashboard() {
+      setStatus('loading');
+
+      try {
+        const baseData = await fetchDashboardData();
+
+        if (activeMissionId) {
+          const orchestratorData = await fetchPipelineFromOrchestrator(activeMissionId);
+          if (isMounted) {
+            setData({
+              ...baseData,
+              pipelineSnapshot: orchestratorData.stages ?? baseData.pipelineSnapshot
+            });
+            setStatus('ready');
+          }
+          return;
+        }
+
+        if (isMounted) {
+          setData(baseData);
+          setStatus('ready');
+        }
+      } catch {
+        if (isMounted) {
+          setStatus('error');
+        }
+      }
+    }
+
+    loadDashboard();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeMissionId]);
+
+  if (!data) {
+    return (
+      <div className="card">
+        <div className="list-row">
+          <div>
+            <div>Dashboard Mission Context</div>
+            <div className="muted small">{activeMissionId ?? 'mission-local-001'}</div>
+          </div>
+          <div>
+            <span className={status === 'ready' ? 'badge success' : status === 'loading' ? 'badge warning' : status === 'error' ? 'badge danger' : 'badge'}>
+              {status}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div className="list-row">
+          <div>
+            <div>Dashboard Mission Context</div>
+            <div className="muted small">{activeMissionId ?? 'mission-local-001'}</div>
+          </div>
+          <div>
+            <span className={status === 'ready' ? 'badge success' : status === 'loading' ? 'badge warning' : status === 'error' ? 'badge danger' : 'badge'}>
+              {status}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <DashboardScreen
+        activeMissions={data.activeMissions}
+        pipelineSnapshot={data.pipelineSnapshot}
+        trendSignals={data.trendSignals}
+      />
+    </div>
+  );
+}
