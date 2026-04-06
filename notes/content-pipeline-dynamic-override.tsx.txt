@@ -1,0 +1,69 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import { PipelineScreen } from '@/components/screens/pipeline-screen';
+import { useAppState } from '@/context/app-state';
+import { fetchPipelineFromOrchestrator } from '@/lib/orchestrator-client';
+import { fetchPipelineData } from '@/lib/api';
+import { PipelineStage } from '@/types';
+
+export default function ContentPipelinePage() {
+  const { activeMissionId } = useAppState();
+  const [stages, setStages] = useState<PipelineStage[]>([]);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadPipeline() {
+      setStatus('loading');
+
+      try {
+        if (activeMissionId) {
+          const orchestratorData = await fetchPipelineFromOrchestrator(activeMissionId);
+          if (isMounted) {
+            setStages(orchestratorData.stages ?? []);
+            setStatus('ready');
+          }
+          return;
+        }
+
+        const fallbackStages = await fetchPipelineData();
+        if (isMounted) {
+          setStages(fallbackStages);
+          setStatus('ready');
+        }
+      } catch {
+        if (isMounted) {
+          setStatus('error');
+        }
+      }
+    }
+
+    loadPipeline();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeMissionId]);
+
+  return (
+    <div>
+      <div className="card" style={{ marginBottom: 16 }}>
+        <div className="list-row">
+          <div>
+            <div>Pipeline Mission Context</div>
+            <div className="muted small">{activeMissionId ?? 'mission-local-001'}</div>
+          </div>
+          <div>
+            <span className={status === 'ready' ? 'badge success' : status === 'loading' ? 'badge warning' : status === 'error' ? 'badge danger' : 'badge'}>
+              {status}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <PipelineScreen stages={stages} />
+    </div>
+  );
+}
