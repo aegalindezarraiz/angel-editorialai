@@ -1,0 +1,39 @@
+servers:
+  web_research:
+    purpose: research and source retrieval
+    consumers:
+      - trend_intelligence_agent
+      - market_research_agent
+      - audience_insight_agent
+  trend_data:
+    purpose: trend signals and search interest
+    consumers:
+      - trend_intelligence_agent
+      - editorial_strategy_agent
+  social_operations:
+    purpose: publishing workflows and channel operations
+    consumers:
+      - publishing_agent
+      - orchestrator_agent
+  analytics:
+    purpose: performance analysis and reporting
+    consumers:
+      - performance_analyst_agent
+      - memory_agent
+  memory_store:
+    purpose: retrieval of past hooks themes and winners
+    consumers:
+      - memory_agent
+      - orchestrator_agent
+      - editorial_strategy_agent
+  filesystem:
+    purpose: templates outputs and content packets
+    consumers:
+      - publishing_agent
+      - orchestrator_agent
+  database:
+    purpose: structured persistence for missions assets and results
+    consumers:
+      - orchestrator_agent
+      - performance_analyst_agent
+      - memory_agent
