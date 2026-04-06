@@ -1,0 +1,32 @@
+{
+  "servers": {
+    "web_research": {
+      "transport": "stdio",
+      "enabled": true
+    },
+    "trend_data": {
+      "transport": "stdio",
+      "enabled": true
+    },
+    "social_operations": {
+      "transport": "stdio",
+      "enabled": true
+    },
+    "analytics": {
+      "transport": "stdio",
+      "enabled": true
+    },
+    "memory_store": {
+      "transport": "stdio",
+      "enabled": true
+    },
+    "filesystem": {
+      "transport": "stdio",
+      "enabled": true
+    },
+    "database": {
+      "transport": "stdio",
+      "enabled": true
+    }
+  }
+}
