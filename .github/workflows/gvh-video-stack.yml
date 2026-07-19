@@ -1,0 +1,157 @@
+name: GVH Video Stack Validation
+
+on:
+  push:
+    branches:
+      - gvh-video-stack
+    paths:
+      - ".github/workflows/gvh-video-stack.yml"
+      - "integrations/video-stack/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/gvh-video-stack.yml"
+      - "integrations/video-stack/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  openmontage:
+    name: OpenMontage · install and render GVH demo
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout GVH integration
+        uses: actions/checkout@v4
+
+      - name: Checkout OpenMontage
+        uses: actions/checkout@v4
+        with:
+          repository: calesthio/OpenMontage
+          ref: main
+          path: vendor/OpenMontage
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: vendor/OpenMontage/requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: vendor/OpenMontage/remotion-composer/package-lock.json
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version | head -n 1
+
+      - name: Install OpenMontage
+        working-directory: vendor/OpenMontage
+        env:
+          PYTHON_VERSION: "3.11"
+        run: |
+          set -o pipefail
+          make setup 2>&1 | tee ../../openmontage-install.log
+
+      - name: Inject GVH zero-key composition
+        run: |
+          cp integrations/video-stack/openmontage/gvh-brand-intro.json \
+            vendor/OpenMontage/remotion-composer/public/demo-props/gvh-brand-intro.json
+
+      - name: Run OpenMontage preflight
+        working-directory: vendor/OpenMontage
+        run: |
+          set -o pipefail
+          make preflight 2>&1 | tee ../../openmontage-preflight.log
+          .venv/bin/python render_demo.py --list 2>&1 | tee ../../openmontage-demo-list.log
+
+      - name: Execute GVH render
+        working-directory: vendor/OpenMontage
+        run: |
+          set -o pipefail
+          .venv/bin/python render_demo.py gvh-brand-intro 2>&1 | tee ../../openmontage-render.log
+
+      - name: Upload OpenMontage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gvh-openmontage-evidence
+          if-no-files-found: warn
+          path: |
+            openmontage-*.log
+            vendor/OpenMontage/projects/demos/renders/gvh-brand-intro.mp4
+
+  palmier-pro:
+    name: Palmier Pro · build, test and launch probe
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Palmier Pro
+        uses: actions/checkout@v4
+        with:
+          repository: palmier-io/palmier-pro
+          ref: main
+          path: vendor/palmier-pro
+          fetch-depth: 1
+
+      - name: Record macOS toolchain
+        run: |
+          sw_vers | tee palmier-environment.log
+          uname -m | tee -a palmier-environment.log
+          xcodebuild -version | tee -a palmier-environment.log
+          swift --version | tee -a palmier-environment.log
+
+      - name: Resolve Palmier Pro dependencies
+        working-directory: vendor/palmier-pro
+        run: |
+          set -o pipefail
+          swift package resolve 2>&1 | tee ../../palmier-resolve.log
+
+      - name: Build Palmier Pro
+        working-directory: vendor/palmier-pro
+        run: |
+          set -o pipefail
+          swift build -c debug 2>&1 | tee ../../palmier-build.log
+
+      - name: Test Palmier Pro
+        working-directory: vendor/palmier-pro
+        run: |
+          set -o pipefail
+          swift test -c debug 2>&1 | tee ../../palmier-test.log
+
+      - name: Execute launch probe
+        working-directory: vendor/palmier-pro
+        run: |
+          set +e
+          swift run PalmierPro > ../../palmier-run.log 2>&1 &
+          pid=$!
+          sleep 20
+          if kill -0 "$pid" 2>/dev/null; then
+            echo "Palmier Pro remained alive for the 20-second launch probe." | tee -a ../../palmier-run.log
+            kill "$pid"
+            wait "$pid" || true
+            exit 0
+          fi
+          wait "$pid"
+          code=$?
+          echo "Palmier Pro exited during launch probe with code $code." | tee -a ../../palmier-run.log
+          exit "$code"
+
+      - name: Upload Palmier evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gvh-palmier-pro-evidence
+          if-no-files-found: warn
+          path: |
+            palmier-*.log

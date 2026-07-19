@@ -1,0 +1,67 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "gvh-hook",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 3.5,
+      "text": "GLOBAL VENEZUELA HUB",
+      "subtitle": "Soluciones y oportunidades reales en una sola red global",
+      "backgroundColor": "#0B1D3A"
+    },
+    {
+      "id": "gvh-network",
+      "source": "",
+      "type": "stat_card",
+      "in_seconds": 3.5,
+      "out_seconds": 7.5,
+      "stat": "GVH",
+      "subtitle": "Claridad, confianza y acompañamiento",
+      "accentColor": "#FF4A00",
+      "backgroundColor": "#0B1D3A"
+    },
+    {
+      "id": "gvh-services",
+      "source": "",
+      "type": "bar_chart",
+      "in_seconds": 7.5,
+      "out_seconds": 13.0,
+      "title": "Una red multiservicio",
+      "chartData": [
+        { "label": "Documentos", "value": 100 },
+        { "label": "Viajes", "value": 100 },
+        { "label": "Encomiendas", "value": 100 },
+        { "label": "Tu Auto", "value": 100 }
+      ],
+      "chartColors": ["#FF4A00", "#FFFFFF", "#C7CBD1", "#F2F4F7"],
+      "showGrid": false,
+      "showValues": false,
+      "backgroundColor": "#0B1D3A"
+    },
+    {
+      "id": "gvh-close",
+      "source": "",
+      "type": "text_card",
+      "in_seconds": 13.0,
+      "out_seconds": 18.0,
+      "text": "CONECTAMOS. ORIENTAMOS. RESOLVEMOS.",
+      "subtitle": "globalvenhub.com · Escríbenos por WhatsApp",
+      "color": "#FFFFFF",
+      "backgroundColor": "#FF4A00"
+    }
+  ],
+  "overlays": [
+    {
+      "type": "section_title",
+      "in_seconds": 7.8,
+      "out_seconds": 11.5,
+      "text": "SERVICIOS GVH",
+      "subtitle": "Una identidad. Un sistema. Un siguiente paso.",
+      "accentColor": "#FF4A00"
+    }
+  ],
+  "captions": [],
+  "audio": {}
+}
