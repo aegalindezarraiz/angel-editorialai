@@ -7,6 +7,12 @@ on:
     paths:
       - ".github/workflows/gvh-video-stack.yml"
       - "integrations/video-stack/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/gvh-video-stack.yml"
+      - "integrations/video-stack/**"
   workflow_dispatch:
 
 permissions:
